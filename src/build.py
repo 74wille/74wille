@@ -14,8 +14,6 @@ RED, PAPER, INK, BG = "#ff2a4a", "#f1ece0", "#111111", "#141414"
 STYLE = f"""{FONTS}text{{font-family:R,Roboto,Arial,sans-serif}}
 .draw{{stroke-dasharray:var(--l);stroke-dashoffset:var(--l);animation:dr .9s cubic-bezier(.6,0,.3,1) var(--d,.3s) forwards}}
 @keyframes dr{{to{{stroke-dashoffset:0}}}}
-.slam{{opacity:0;transform-box:fill-box;transform-origin:center;animation:sl .35s cubic-bezier(.2,1.6,.4,1) var(--d,1.2s) forwards}}
-@keyframes sl{{from{{opacity:0;transform:scale(1.8) rotate(-8deg)}}to{{opacity:1;transform:scale(1)}}}}
 .drop{{opacity:0;animation:dp .5s cubic-bezier(.2,1.4,.4,1) var(--d,0s) forwards}}
 @keyframes dp{{from{{opacity:0;transform:translateY(-24px)}}to{{opacity:1;transform:none}}}}"""
 # rough = ojämna tryckkanter, grain = kopieringsbrus
@@ -79,11 +77,6 @@ def header():
 <g class="drop" style="--d:.9s" transform="rotate(-2 400 330)">{torn(40, 300, 640, 66, 5)}
 {T(66, 346, 30, "makes apps. ships them. repeats.", INK, 900, -.5)}</g>
 <g class="drop" style="--d:.6s">{tape(1040, 74, 290, 6, "STOCKHOLM, SWEDEN")}</g>
-<g class="slam" style="--d:1.4s"><g transform="rotate(-9 1040 270)" filter="url(#rough)">
-<rect x="905" y="215" width="270" height="110" rx="6" fill="none" stroke="{PAPER}" stroke-width="7"/>
-<rect x="917" y="227" width="246" height="86" rx="3" fill="none" stroke="{PAPER}" stroke-width="2"/>
-{T(1040, 270, 44, "3 APPS", PAPER, 900, 4, 'text-anchor="middle"')}
-{T(1040, 302, 20, "SHIPPED &amp; LIVE", PAPER, 900, 5, 'text-anchor="middle"')}</g></g>
 <rect width="{W}" height="{H}" filter="url(#grain)"/>''')
 
 # ---------- projektlappar (tre i bredd) ----------

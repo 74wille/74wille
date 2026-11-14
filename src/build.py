@@ -8,132 +8,142 @@ OUT.mkdir(exist_ok=True)
 def b64(name): return base64.b64encode((SRC / name).read_bytes()).decode()
 
 FONTS = "".join(
-    f"@font-face{{font-family:R;font-weight:{w};src:url(data:font/woff2;base64,{b64(f'roboto-{w}.woff2')})}}"
-    for w in (400, 700, 900))
+    f"@font-face{{font-family:{f};font-weight:{w};src:url(data:font/woff2;base64,{b64(file)})}}"
+    for f, w, file in (("R", 700, "roboto-700.woff2"), ("R", 900, "roboto-900.woff2"),
+                       ("M", 500, "mono-500.woff2"), ("M", 700, "mono-700.woff2")))
 
-BG, LINE, ACC, ACC2, TXT, MUTED = "#0b0f14", "#1f2933", "#5b9bd5", "#a8d1f5", "#e6edf3", "#8b98a5"
+BG, LINE, RED, TXT, MUTED = "#060708", "#1c1f24", "#ff2a4a", "#f2f2f2", "#6b7280"
+BASE = f"{FONTS}.r{{font-family:R,Roboto,Arial,sans-serif}}.m{{font-family:M,'Roboto Mono',Consolas,monospace}}"
+SCAN = ('<pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">'
+        '<rect width="4" height="1" fill="#fff" fill-opacity=".035"/></pattern>')
 
 def esc(s): return s.replace("&", "&amp;").replace("<", "&lt;")
 
+def glitch_text(x, y, size, text, cls="r", weight=900, ls=-4):
+    """Text med RGB-split och ryckiga glitch-skivor."""
+    t = f'x="{x}" y="{y}" font-size="{size}" font-weight="{weight}" letter-spacing="{ls}" class="{cls}"'
+    return f'''<g class="gl">
+<text {t} fill="#00e5ff" class="ca" opacity=".75">{text}</text>
+<text {t} fill="{RED}" class="cb" opacity=".85">{text}</text>
+<text {t} fill="{TXT}">{text}</text>
+<text {t} fill="{TXT}" class="s1">{text}</text>
+<text {t} fill="{RED}" class="s2">{text}</text></g>'''
+
+GLITCH_CSS = """
+.ca{animation:ca 3s steps(1) infinite}.cb{animation:cb 3s steps(1) infinite}
+@keyframes ca{0%,100%{transform:translate(-3px,0)}20%{transform:translate(-6px,1px)}22%{transform:translate(2px,-1px)}24%{transform:translate(-3px,0)}70%{transform:translate(-9px,0)}71%{transform:translate(-3px,0)}}
+@keyframes cb{0%,100%{transform:translate(3px,0)}20%{transform:translate(6px,-1px)}22%{transform:translate(-2px,1px)}24%{transform:translate(3px,0)}70%{transform:translate(9px,0)}71%{transform:translate(3px,0)}}
+.s1,.s2{opacity:0}
+.s1{animation:s1 3s steps(1) infinite}.s2{animation:s2 3s steps(1) infinite}
+@keyframes s1{20%{opacity:1;clip-path:inset(30% 0 52% 0);transform:translateX(-14px)}22%{opacity:1;clip-path:inset(62% 0 20% 0);transform:translateX(10px)}24%{opacity:0}70%{opacity:1;clip-path:inset(10% 0 75% 0);transform:translateX(18px)}72%{opacity:0}}
+@keyframes s2{21%{opacity:.9;clip-path:inset(45% 0 40% 0);transform:translateX(12px)}23%{opacity:0}71%{opacity:.9;clip-path:inset(70% 0 12% 0);transform:translateX(-16px)}72%{opacity:0}}
+.flick{animation:fl 4s steps(1) infinite}@keyframes fl{0%,100%{opacity:1}43%{opacity:.2}44%{opacity:1}46%{opacity:.4}47%{opacity:1}}
+.blink{animation:bl 1s steps(1) infinite}@keyframes bl{50%{opacity:0}}
+.sweep{animation:sw 4.5s linear infinite}@keyframes sw{from{transform:translateY(-60px)}to{transform:translateY(420px)}}
+"""
+
+def brackets(W, H, m=14, l=26, c=RED):
+    p = lambda d: f'<path d="{d}" fill="none" stroke="{c}" stroke-width="3"/>'
+    return (p(f"M{m} {m+l}V{m}H{m+l}") + p(f"M{W-m-l} {m}H{W-m}V{m+l}") +
+            p(f"M{m} {H-m-l}V{H-m}H{m+l}") + p(f"M{W-m-l} {H-m}H{W-m}V{H-m-l}"))
+
 # ---------- banner ----------
 def header():
-    random.seed(7)
-    W, H = 1280, 360
-    pixels = []
-    while len(pixels) < 46:
-        x, y, s = random.randrange(20, W - 20), random.randrange(20, H - 20), random.choice((4, 6, 8))
-        if x < 900 and 60 < y < 340: continue  # håll texten ren
-        if x > 900 and 50 < y < 360 and (x < 1220): continue  # och ikonerna
-        d, dur = random.random() * 4, 2.5 + random.random() * 3
-        pixels.append(f'<rect x="{x}" y="{y}" width="{s}" height="{s}" fill="{random.choice((ACC, ACC2, "#ffffff"))}" '
-                      f'class="px" style="animation-delay:{d:.2f}s;animation-duration:{dur:.2f}s"/>')
-    icons = [("WillesJournal-160.png", 930, 70, 0), ("PromptForge-160.png", 1090, 120, .8),
-             ("WillesDesktop-160.png", 950, 200, 1.6), ("GasEgg-160.png", 1100, 260, 2.4)]
-    ic = "".join(
-        f'<g class="bob" style="animation-delay:{d}s"><rect x="{x-6}" y="{y-6}" width="{112 if i<3 else 92}" height="{112 if i<3 else 92}" rx="24" fill="#111821" stroke="{LINE}"/>'
-        f'<image href="data:image/png;base64,{b64(n)}" x="{x+4}" y="{y+4}" width="{92 if i<3 else 72}" height="{92 if i<3 else 72}" clip-path="url(#c{i})"/></g>'
-        f'<clipPath id="c{i}"><rect x="{x+4}" y="{y+4}" width="{92 if i<3 else 72}" height="{92 if i<3 else 72}" rx="18"/></clipPath>'
-        for i, (n, x, y, d) in enumerate(icons))
-    sub = "I build desktop apps, web apps and Roblox games."
+    random.seed(11)
+    W, H = 1280, 380
+    noise = "".join(f'<rect x="{random.randrange(W)}" y="{random.randrange(H)}" width="{random.choice((2,3,40,90,160))}" height="2" fill="{random.choice((RED, "#fff"))}" '
+                    f'opacity="0" style="animation:nz {2+random.random()*3:.2f}s steps(1) {random.random()*3:.2f}s infinite"/>'
+                    for _ in range(26))
+    sub = "> building apps, tools & roblox games_"
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">
-<style>{FONTS}
-text{{font-family:R,Roboto,Helvetica,Arial,sans-serif}}
-.px{{opacity:0;animation:tw ease-in-out infinite}}@keyframes tw{{50%{{opacity:.8}}}}
-.bob{{animation:bob 6s ease-in-out infinite}}@keyframes bob{{50%{{transform:translateY(-10px)}}}}
-.glow{{animation:drift 14s ease-in-out infinite alternate}}@keyframes drift{{to{{transform:translate(420px,60px)}}}}
-.type{{clip-path:inset(0 100% 0 0);animation:type 3.2s steps({len(sub)}) .6s forwards}}@keyframes type{{to{{clip-path:inset(0 0 0 0)}}}}
-@keyframes blink{{50%{{opacity:0}}}}
-.cur{{transform:translateX(0);animation:blink 1s step-end infinite,mv 3.2s steps({len(sub)}) .6s forwards}}@keyframes mv{{to{{transform:translateX(var(--w))}}}}
-.in{{opacity:0;animation:in .9s ease-out forwards}}@keyframes in{{from{{opacity:0;transform:translateY(14px)}}to{{opacity:1;transform:none}}}}
+<style>{BASE}{GLITCH_CSS}
+@keyframes nz{{0%{{opacity:0}}5%{{opacity:.7}}8%{{opacity:0}}}}
+.type{{clip-path:inset(0 100% 0 0);animation:ty 2.6s steps({len(sub)}) .5s forwards}}@keyframes ty{{to{{clip-path:inset(0 0 0 0)}}}}
 </style>
-<defs>
-<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity=".045"/></pattern>
-<radialGradient id="g1"><stop offset="0" stop-color="{ACC}" stop-opacity=".35"/><stop offset="1" stop-color="{ACC}" stop-opacity="0"/></radialGradient>
-<linearGradient id="name" x1="0" x2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="{ACC2}"/><stop offset="1" stop-color="{ACC}"/></linearGradient>
-<linearGradient id="fade" x1="0" x2="1"><stop offset=".55" stop-color="{BG}" stop-opacity="0"/><stop offset="1" stop-color="{BG}" stop-opacity=".0"/></linearGradient>
-<clipPath id="card"><rect width="{W}" height="{H}" rx="22"/></clipPath>
+<defs>{SCAN}
+<pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".04"/></pattern>
+<linearGradient id="sw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{RED}" stop-opacity="0"/><stop offset="1" stop-color="{RED}" stop-opacity=".12"/></linearGradient>
+<clipPath id="cut"><path d="M0 0H{W-60}L{W} 60V{H}H60L0 {H-60}Z"/></clipPath>
 </defs>
-<g clip-path="url(#card)">
+<g clip-path="url(#cut)">
 <rect width="{W}" height="{H}" fill="{BG}"/>
 <rect width="{W}" height="{H}" fill="url(#grid)"/>
-<circle class="glow" cx="220" cy="120" r="380" fill="url(#g1)"/>
-{''.join(pixels)}
-<text class="in" x="72" y="96" font-size="17" font-weight="700" letter-spacing="5" fill="{ACC}">STOCKHOLM · SWEDEN</text>
-<text class="in" x="64" y="222" font-size="150" font-weight="900" letter-spacing="-4" fill="url(#name)" style="animation-delay:.15s">WILLE</text>
-<g style="--w:{len(sub)*12.35:.0f}px">
-<text class="type" x="72" y="282" font-size="22" font-weight="400" fill="{TXT}">{sub}</text>
-<rect class="cur" x="74" y="264" width="11" height="24" fill="{ACC}"/>
-</g>
-<text class="in" x="72" y="322" font-size="15" font-weight="700" letter-spacing="3" fill="{MUTED}" style="animation-delay:.4s">ELECTRON  ·  NEXT.JS  ·  SUPABASE  ·  LUAU</text>
-{ic}
-<rect x=".5" y=".5" width="{W-1}" height="{H-1}" rx="22" fill="none" stroke="{LINE}"/>
-</g>
-</svg>'''
+<path d="M{W-520} 0H{W}V{H}H{W-820}Z" fill="{RED}" fill-opacity=".06"/>
+<path d="M{W-470} 0H{W-455}L{W-755} {H}H{W-770}Z" fill="{RED}" fill-opacity=".5"/>
+<rect class="sweep" x="0" y="0" width="{W}" height="60" fill="url(#sw)"/>
+{noise}
+<text x="72" y="92" font-size="16" font-weight="700" letter-spacing="4" fill="{RED}" class="m flick">// STOCKHOLM, SE · EST. 2026</text>
+{glitch_text(62, 250, 176, "WILLE")}
+<text x="72" y="306" font-size="22" font-weight="500" fill="{TXT}" class="m type">{esc(sub)}</text>
+<text x="72" y="344" font-size="14" font-weight="700" letter-spacing="3" fill="{MUTED}" class="m">ELECTRON / NEXT.JS / SUPABASE / LUAU</text>
+<g class="m" font-size="13" font-weight="700" fill="{MUTED}" letter-spacing="2" text-anchor="end">
+<text x="{W-70}" y="290">SYS.STATUS <tspan fill="{RED}" class="blink">■ ONLINE</tspan></text>
+<text x="{W-70}" y="314">BUILDS.SHIPPED <tspan fill="{TXT}">04</tspan></text>
+<text x="{W-70}" y="338">SLEEP <tspan fill="{TXT}">OPTIONAL</tspan></text></g>
+<rect width="{W}" height="{H}" fill="url(#scan)"/>
+{brackets(W, H)}
+</g></svg>'''
 
-# ---------- appkort ----------
-def card(icon, name, lines, chips, cta, accent):
-    W, H = 600, 250
-    chip_svg, x = "", 196
+# ---------- projektkort ----------
+def card(num, name, lines, chips, cta, tag):
+    W, H = 600, 260
+    chip_svg, x = "", 40
     for c in chips:
-        w = len(c) * 8.4 + 26
-        chip_svg += f'<rect x="{x}" y="176" width="{w:.0f}" height="30" rx="15" fill="{accent}" fill-opacity=".14" stroke="{accent}" stroke-opacity=".5"/><text x="{x+w/2:.0f}" y="196" font-size="13" font-weight="700" fill="{accent}" text-anchor="middle" letter-spacing="1">{c}</text>'
-        x += w + 10
-    body = "".join(f'<text x="196" y="{112+i*24}" font-size="17" fill="{MUTED}">{esc(l)}</text>' for i, l in enumerate(lines))
+        w = len(c) * 9 + 24
+        chip_svg += (f'<rect x="{x}" y="188" width="{w:.0f}" height="28" fill="none" stroke="{MUTED}"/>'
+                     f'<text x="{x+w/2:.0f}" y="207" font-size="12" font-weight="700" fill="{TXT}" text-anchor="middle" letter-spacing="1" class="m">{c}</text>')
+        x += w + 8
+    body = "".join(f'<text x="40" y="{140+i*22}" font-size="15" font-weight="500" fill="{MUTED}" class="m">{esc(l)}</text>' for i, l in enumerate(lines))
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">
-<style>{FONTS}text{{font-family:R,Roboto,Helvetica,Arial,sans-serif}}
-.sh{{animation:sh 5s ease-in-out infinite}}@keyframes sh{{0%,60%{{transform:translateX(-700px)}}100%{{transform:translateX(700px)}}}}
-.bob{{animation:bob 5s ease-in-out infinite}}@keyframes bob{{50%{{transform:translateY(-5px)}}}}</style>
-<defs><clipPath id="r"><rect width="{W}" height="{H}" rx="20"/></clipPath><clipPath id="i"><rect x="40" y="48" width="124" height="124" rx="28"/></clipPath>
-<linearGradient id="s" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-<radialGradient id="g" cx="0.15" cy="0.3" r=".7"><stop offset="0" stop-color="{accent}" stop-opacity=".22"/><stop offset="1" stop-color="{accent}" stop-opacity="0"/></radialGradient></defs>
-<g clip-path="url(#r)">
-<rect width="{W}" height="{H}" fill="{BG}"/><rect width="{W}" height="{H}" fill="url(#g)"/>
-<rect class="sh" x="0" y="0" width="300" height="{H}" fill="url(#s)" transform="skewX(-20)"/>
-<g class="bob"><image href="data:image/png;base64,{b64(icon)}" x="40" y="48" width="124" height="124" clip-path="url(#i)"/></g>
-<text x="196" y="80" font-size="30" font-weight="900" fill="{TXT}" letter-spacing="-.5">{esc(name)}</text>
+<style>{BASE}{GLITCH_CSS}</style>
+<defs>{SCAN}<clipPath id="cut"><path d="M0 0H{W-34}L{W} 34V{H}H34L0 {H-34}Z"/></clipPath></defs>
+<g clip-path="url(#cut)">
+<rect width="{W}" height="{H}" fill="{BG}"/>
+<text x="{W-24}" y="{H-20}" font-size="190" font-weight="900" fill="#fff" fill-opacity=".04" text-anchor="end" class="r" letter-spacing="-8">{num}</text>
+<text x="40" y="52" font-size="13" font-weight="700" letter-spacing="3" fill="{RED}" class="m">{num} // {tag}</text>
+{glitch_text(36, 104, 44, esc(name), ls=-1)}
 {body}{chip_svg}
-<text x="{W-36}" y="{H-26}" font-size="15" font-weight="700" fill="{accent}" text-anchor="end" letter-spacing="1">{cta} →</text>
-<rect x="0" y="{H-3}" width="{W}" height="3" fill="{accent}"/>
-<rect x=".5" y=".5" width="{W-1}" height="{H-1}" rx="20" fill="none" stroke="{LINE}"/></g></svg>'''
+<text x="{W-40}" y="{H-36}" font-size="15" font-weight="700" fill="{RED}" text-anchor="end" letter-spacing="2" class="m">[ {cta} ]<tspan class="blink">_</tspan></text>
+<rect width="{W}" height="{H}" fill="url(#scan)"/>
+<path d="M.5 .5H{W-34}L{W-.5} 34V{H-.5}H34L.5 {H-34}Z" fill="none" stroke="{LINE}" stroke-width="2"/>
+<path d="M0 0H140" stroke="{RED}" stroke-width="6"/>
+</g></svg>'''
 
 # ---------- rubriker ----------
-def title(text, sub):
+def title(idx, text, sub):
     W = 1280
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 70" width="{W}" height="70">
-<style>{FONTS}text{{font-family:R,Roboto,Helvetica,Arial,sans-serif}}
-.bar{{transform-origin:0 0;transform:scaleX(0);animation:g 1.2s .2s cubic-bezier(.2,.8,.2,1) forwards}}@keyframes g{{to{{transform:scaleX(1)}}}}</style>
-<rect x="0" y="16" width="8" height="34" rx="2" fill="{ACC}"/>
-<text x="26" y="44" font-size="30" font-weight="900" fill="{ACC2}" letter-spacing="2">{text}</text>
-<text x="{26+len(text)*22+24}" y="44" font-size="17" fill="{MUTED}">{esc(sub)}</text>
-<rect class="bar" x="0" y="66" width="{W}" height="2" fill="{LINE}"/></svg>'''
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 80" width="{W}" height="80">
+<style>{BASE}{GLITCH_CSS}
+.bar{{transform-origin:0 0;transform:scaleX(0);animation:g 1s .2s steps(12) forwards}}@keyframes g{{to{{transform:scaleX(1)}}}}</style>
+<text x="0" y="50" font-size="16" font-weight="700" fill="{RED}" class="m">{idx}</text>
+{glitch_text(44, 54, 40, text, ls=1)}
+<text x="{44+len(text)*28+24}" y="50" font-size="15" font-weight="500" fill="{MUTED}" class="m">// {esc(sub)}</text>
+<rect class="bar" x="0" y="72" width="{W}" height="2" fill="{RED}"/><rect x="0" y="72" width="{W}" height="2" fill="{LINE}" opacity=".6"/></svg>'''
 
 def footer():
-    random.seed(3)
     W = 1280
-    bars = "".join(f'<rect x="{i*16}" y="{40-h}" width="12" height="{h}" fill="{ACC}" opacity="{.15+h/60:.2f}" class="b" style="animation-delay:{i*.04:.2f}s"/>'
-                   for i, h in enumerate(random.randint(4, 36) for _ in range(80)))
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 110" width="{W}" height="110">
-<style>{FONTS}text{{font-family:R,Roboto,Helvetica,Arial,sans-serif}}
-.b{{transform-box:fill-box;transform-origin:bottom;animation:eq 1.8s ease-in-out infinite alternate}}@keyframes eq{{from{{transform:scaleY(.25)}}}}</style>
-{bars}<text x="{W/2}" y="92" font-size="16" font-weight="700" letter-spacing="6" fill="{MUTED}" text-anchor="middle">THANKS FOR STOPPING BY</text></svg>'''
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 90" width="{W}" height="90">
+<style>{BASE}{GLITCH_CSS}</style>
+<rect x="0" y="10" width="{W}" height="2" fill="{LINE}"/><rect x="0" y="10" width="160" height="2" fill="{RED}"/>
+<text x="{W/2}" y="60" font-size="15" font-weight="700" letter-spacing="6" fill="{MUTED}" text-anchor="middle" class="m flick">END OF TRANSMISSION <tspan fill="{RED}" class="blink">■</tspan></text></svg>'''
 
 files = {
     "header.svg": header(),
-    "card-journal.svg": card("WillesJournal-160.png", "Wille's Journal",
-        ["The complete trading journal. Log every trade,", "track your stats and grow with your mentor."],
-        ["WINDOWS", "MAC"], "DOWNLOAD", "#4fbf6b"),
-    "card-desktop.svg": card("WillesDesktop-160.png", "Wille's Desktop",
+    "card-journal.svg": card("01", "Wille's Journal",
+        ["The complete trading journal. Log every", "trade, track your stats, get better."],
+        ["WINDOWS", "MAC"], "DOWNLOAD", "DESKTOP APP"),
+    "card-desktop.svg": card("02", "Wille's Desktop",
         ["Premium desktop widgets and taskbar", "customization for Windows."],
-        ["WINDOWS"], "DOWNLOAD", ACC),
-    "card-promptforge.svg": card("PromptForge-160.png", "PromptForge",
-        ["A Windows terminal you shape with checkboxes.", "Every session starts with the PATH you chose."],
-        ["WINDOWS", "ELECTRON"], "DOWNLOAD", "#e07a4f"),
-    "card-gasegg.svg": card("GasEgg-160.png", "Steal a Gas Egg",
-        ["Roblox game with my own pixel-style models,", "UI, animations and sound."],
-        ["ROBLOX", "LUAU"], "PLAY", "#a77bf3"),
-    "title-work.svg": title("SHIPPED", "apps and games you can use right now"),
-    "title-stack.svg": title("STACK", "what I build with"),
-    "title-activity.svg": title("ACTIVITY", "my contributions, eaten live"),
+        ["WINDOWS"], "DOWNLOAD", "DESKTOP APP"),
+    "card-promptforge.svg": card("03", "PromptForge",
+        ["A Windows terminal you shape with", "checkboxes. Your PATH, your rules."],
+        ["WINDOWS", "TERMINAL"], "DOWNLOAD", "DEV TOOL"),
+    "card-gasegg.svg": card("04", "Steal a Gas Egg",
+        ["Roblox game. Own pixel models, UI,", "animations and sound."],
+        ["ROBLOX", "LUAU"], "PLAY", "GAME"),
+    "title-work.svg": title("01", "SHIPPED", "live, download it"),
+    "title-stack.svg": title("02", "ARSENAL", "what i build with"),
+    "title-activity.svg": title("03", "ACTIVITY", "commits, eaten alive"),
     "footer.svg": footer(),
 }
 for n, s in files.items():

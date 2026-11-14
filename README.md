@@ -3,9 +3,9 @@
 </p>
 
 <p align="center">
-  <img src="https://komarev.com/ghpvc/?username=74wille&style=for-the-badge&color=5b9bd5&label=PROFILE+VIEWS" alt="profile views" />
-  <a href="https://github.com/74wille?tab=repositories"><img src="https://img.shields.io/badge/APPS_SHIPPED-3-5b9bd5?style=for-the-badge" alt="apps shipped" /></a>
-  <a href="https://www.roblox.com/games/87697408059425"><img src="https://img.shields.io/badge/ROBLOX-LIVE-a77bf3?style=for-the-badge&logo=roblox&logoColor=white" alt="Roblox live" /></a>
+  <img src="https://komarev.com/ghpvc/?username=74wille&style=for-the-badge&color=ff2a4a&label=VISITORS" alt="profile views" />
+  <a href="https://github.com/74wille?tab=repositories"><img src="https://img.shields.io/badge/SHIPPED-04-ff2a4a?style=for-the-badge&labelColor=0a0a0a" alt="apps shipped" /></a>
+  <a href="https://www.roblox.com/games/87697408059425"><img src="https://img.shields.io/badge/ROBLOX-LIVE-ff2a4a?style=for-the-badge&labelColor=0a0a0a&logo=roblox&logoColor=white" alt="Roblox live" /></a>
 </p>
 
 <img src="assets/title-work.svg" width="100%" alt="Shipped" />
@@ -22,7 +22,7 @@
 <img src="assets/title-stack.svg" width="100%" alt="Stack" />
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,electron,supabase,firebase,python,lua,html,css,git,github,vscode&perline=15" alt="stack" />
+  <img src="https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,electron,supabase,firebase,python,lua,html,css,git,github,vscode&theme=dark&perline=15" alt="stack" />
 </p>
 
 <img src="assets/title-activity.svg" width="100%" alt="Activity" />
@@ -30,7 +30,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/74wille/74wille/output/github-contribution-grid-snake-dark.svg" />
-    <img src="https://raw.githubusercontent.com/74wille/74wille/output/github-contribution-grid-snake.svg" width="100%" alt="contribution snake" />
+    <img src="https://raw.githubusercontent.com/74wille/74wille/output/github-contribution-grid-snake-dark.svg" width="100%" alt="contribution snake" />
   </picture>
 </p>
 

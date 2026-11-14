@@ -14,10 +14,10 @@
 .bar{transform-origin:0 0;transform:scaleX(0);animation:g 1s .2s steps(12) forwards}@keyframes g{to{transform:scaleX(1)}}</style>
 <text x="0" y="50" font-size="16" font-weight="700" fill="#ff2a4a" class="m">01</text>
 <g class="gl">
-<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" class="r" fill="#00e5ff" class="ca" opacity=".75">SHIPPED</text>
-<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" class="r" fill="#ff2a4a" class="cb" opacity=".85">SHIPPED</text>
-<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" class="r" fill="#f2f2f2">SHIPPED</text>
-<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" class="r" fill="#f2f2f2" class="s1">SHIPPED</text>
-<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" class="r" fill="#ff2a4a" class="s2">SHIPPED</text></g>
+<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" fill="#00e5ff" class="r ca" opacity=".75">SHIPPED</text>
+<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" fill="#ff2a4a" class="r cb" opacity=".85">SHIPPED</text>
+<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" fill="#f2f2f2" class="r">SHIPPED</text>
+<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" fill="#f2f2f2" class="r s1">SHIPPED</text>
+<text x="44" y="54" font-size="40" font-weight="900" letter-spacing="1" fill="#ff2a4a" class="r s2">SHIPPED</text></g>
 <text x="264" y="50" font-size="15" font-weight="500" fill="#6b7280" class="m">// live, download it</text>
 <rect class="bar" x="0" y="72" width="1280" height="2" fill="#ff2a4a"/><rect x="0" y="72" width="1280" height="2" fill="#1c1f24" opacity=".6"/></svg>

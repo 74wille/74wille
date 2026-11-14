@@ -17,11 +17,11 @@
 <text x="576" y="240" font-size="190" font-weight="900" fill="#fff" fill-opacity=".04" text-anchor="end" class="r" letter-spacing="-8">03</text>
 <text x="40" y="52" font-size="13" font-weight="700" letter-spacing="3" fill="#ff2a4a" class="m">03 // DEV TOOL</text>
 <g class="gl">
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#00e5ff" class="ca" opacity=".75">PromptForge</text>
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#ff2a4a" class="cb" opacity=".85">PromptForge</text>
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#f2f2f2">PromptForge</text>
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#f2f2f2" class="s1">PromptForge</text>
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#ff2a4a" class="s2">PromptForge</text></g>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#00e5ff" class="r ca" opacity=".75">PromptForge</text>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#ff2a4a" class="r cb" opacity=".85">PromptForge</text>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#f2f2f2" class="r">PromptForge</text>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#f2f2f2" class="r s1">PromptForge</text>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#ff2a4a" class="r s2">PromptForge</text></g>
 <text x="40" y="140" font-size="15" font-weight="500" fill="#6b7280" class="m">A Windows terminal you shape with</text><text x="40" y="162" font-size="15" font-weight="500" fill="#6b7280" class="m">checkboxes. Your PATH, your rules.</text><rect x="40" y="188" width="87" height="28" fill="none" stroke="#6b7280"/><text x="84" y="207" font-size="12" font-weight="700" fill="#f2f2f2" text-anchor="middle" letter-spacing="1" class="m">WINDOWS</text><rect x="135" y="188" width="96" height="28" fill="none" stroke="#6b7280"/><text x="183" y="207" font-size="12" font-weight="700" fill="#f2f2f2" text-anchor="middle" letter-spacing="1" class="m">TERMINAL</text>
 <text x="560" y="224" font-size="15" font-weight="700" fill="#ff2a4a" text-anchor="end" letter-spacing="2" class="m">[ DOWNLOAD ]<tspan class="blink">_</tspan></text>
 <rect width="600" height="260" fill="url(#scan)"/>

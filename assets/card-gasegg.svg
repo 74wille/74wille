@@ -17,11 +17,11 @@
 <text x="576" y="240" font-size="190" font-weight="900" fill="#fff" fill-opacity=".04" text-anchor="end" class="r" letter-spacing="-8">04</text>
 <text x="40" y="52" font-size="13" font-weight="700" letter-spacing="3" fill="#ff2a4a" class="m">04 // GAME</text>
 <g class="gl">
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#00e5ff" class="ca" opacity=".75">Steal a Gas Egg</text>
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#ff2a4a" class="cb" opacity=".85">Steal a Gas Egg</text>
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#f2f2f2">Steal a Gas Egg</text>
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#f2f2f2" class="s1">Steal a Gas Egg</text>
-<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" class="r" fill="#ff2a4a" class="s2">Steal a Gas Egg</text></g>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#00e5ff" class="r ca" opacity=".75">Steal a Gas Egg</text>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#ff2a4a" class="r cb" opacity=".85">Steal a Gas Egg</text>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#f2f2f2" class="r">Steal a Gas Egg</text>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#f2f2f2" class="r s1">Steal a Gas Egg</text>
+<text x="36" y="104" font-size="44" font-weight="900" letter-spacing="-1" fill="#ff2a4a" class="r s2">Steal a Gas Egg</text></g>
 <text x="40" y="140" font-size="15" font-weight="500" fill="#6b7280" class="m">Roblox game. Own pixel models, UI,</text><text x="40" y="162" font-size="15" font-weight="500" fill="#6b7280" class="m">animations and sound.</text><rect x="40" y="188" width="78" height="28" fill="none" stroke="#6b7280"/><text x="79" y="207" font-size="12" font-weight="700" fill="#f2f2f2" text-anchor="middle" letter-spacing="1" class="m">ROBLOX</text><rect x="126" y="188" width="60" height="28" fill="none" stroke="#6b7280"/><text x="156" y="207" font-size="12" font-weight="700" fill="#f2f2f2" text-anchor="middle" letter-spacing="1" class="m">LUAU</text>
 <text x="560" y="224" font-size="15" font-weight="700" fill="#ff2a4a" text-anchor="end" letter-spacing="2" class="m">[ PLAY ]<tspan class="blink">_</tspan></text>
 <rect width="600" height="260" fill="url(#scan)"/>

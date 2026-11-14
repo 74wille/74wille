@@ -21,13 +21,13 @@ def esc(s): return s.replace("&", "&amp;").replace("<", "&lt;")
 
 def glitch_text(x, y, size, text, cls="r", weight=900, ls=-4):
     """Text med RGB-split och ryckiga glitch-skivor."""
-    t = f'x="{x}" y="{y}" font-size="{size}" font-weight="{weight}" letter-spacing="{ls}" class="{cls}"'
+    t = f'x="{x}" y="{y}" font-size="{size}" font-weight="{weight}" letter-spacing="{ls}"'
     return f'''<g class="gl">
-<text {t} fill="#00e5ff" class="ca" opacity=".75">{text}</text>
-<text {t} fill="{RED}" class="cb" opacity=".85">{text}</text>
-<text {t} fill="{TXT}">{text}</text>
-<text {t} fill="{TXT}" class="s1">{text}</text>
-<text {t} fill="{RED}" class="s2">{text}</text></g>'''
+<text {t} fill="#00e5ff" class="{cls} ca" opacity=".75">{text}</text>
+<text {t} fill="{RED}" class="{cls} cb" opacity=".85">{text}</text>
+<text {t} fill="{TXT}" class="{cls}">{text}</text>
+<text {t} fill="{TXT}" class="{cls} s1">{text}</text>
+<text {t} fill="{RED}" class="{cls} s2">{text}</text></g>'''
 
 GLITCH_CSS = """
 .ca{animation:ca 3s steps(1) infinite}.cb{animation:cb 3s steps(1) infinite}

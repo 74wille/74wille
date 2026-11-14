@@ -54,7 +54,7 @@ def header():
     noise = "".join(f'<rect x="{random.randrange(W)}" y="{random.randrange(H)}" width="{random.choice((2,3,40,90,160))}" height="2" fill="{random.choice((RED, "#fff"))}" '
                     f'opacity="0" style="animation:nz {2+random.random()*3:.2f}s steps(1) {random.random()*3:.2f}s infinite"/>'
                     for _ in range(26))
-    sub = "> building apps, tools & roblox games_"
+    sub = "> building desktop apps, web apps & tools_"
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">
 <style>{BASE}{GLITCH_CSS}
 @keyframes nz{{0%{{opacity:0}}5%{{opacity:.7}}8%{{opacity:0}}}}
@@ -75,10 +75,10 @@ def header():
 <text x="72" y="92" font-size="16" font-weight="700" letter-spacing="4" fill="{RED}" class="m flick">// STOCKHOLM, SE · EST. 2026</text>
 {glitch_text(62, 250, 176, "WILLE")}
 <text x="72" y="306" font-size="22" font-weight="500" fill="{TXT}" class="m type">{esc(sub)}</text>
-<text x="72" y="344" font-size="14" font-weight="700" letter-spacing="3" fill="{MUTED}" class="m">ELECTRON / NEXT.JS / SUPABASE / LUAU</text>
+<text x="72" y="344" font-size="14" font-weight="700" letter-spacing="3" fill="{MUTED}" class="m">ELECTRON / NEXT.JS / SUPABASE / NODE</text>
 <g class="m" font-size="13" font-weight="700" fill="{MUTED}" letter-spacing="2" text-anchor="end">
 <text x="{W-70}" y="290">SYS.STATUS <tspan fill="{RED}" class="blink">■ ONLINE</tspan></text>
-<text x="{W-70}" y="314">BUILDS.SHIPPED <tspan fill="{TXT}">04</tspan></text>
+<text x="{W-70}" y="314">BUILDS.SHIPPED <tspan fill="{TXT}">03</tspan></text>
 <text x="{W-70}" y="338">SLEEP <tspan fill="{TXT}">OPTIONAL</tspan></text></g>
 <rect width="{W}" height="{H}" fill="url(#scan)"/>
 {brackets(W, H)}
@@ -138,9 +138,6 @@ files = {
     "card-promptforge.svg": card("03", "PromptForge",
         ["A Windows terminal you shape with", "checkboxes. Your PATH, your rules."],
         ["WINDOWS", "TERMINAL"], "DOWNLOAD", "DEV TOOL"),
-    "card-gasegg.svg": card("04", "Steal a Gas Egg",
-        ["Roblox game. Own pixel models, UI,", "animations and sound."],
-        ["ROBLOX", "LUAU"], "PLAY", "GAME"),
     "title-work.svg": title("01", "SHIPPED", "live, download it"),
     "title-stack.svg": title("02", "ARSENAL", "what i build with"),
     "title-activity.svg": title("03", "ACTIVITY", "commits, eaten alive"),

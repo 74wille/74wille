@@ -1,11 +1,10 @@
 <p align="center">
-  <img src="assets/header.svg" width="100%" alt="Wille — I build desktop apps, web apps and Roblox games" />
+  <img src="assets/header.svg" width="100%" alt="Wille — I build desktop apps, web apps and tools" />
 </p>
 
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=74wille&style=for-the-badge&color=ff2a4a&label=VISITORS" alt="profile views" />
-  <a href="https://github.com/74wille?tab=repositories"><img src="https://img.shields.io/badge/SHIPPED-04-ff2a4a?style=for-the-badge&labelColor=0a0a0a" alt="apps shipped" /></a>
-  <a href="https://www.roblox.com/games/87697408059425"><img src="https://img.shields.io/badge/ROBLOX-LIVE-ff2a4a?style=for-the-badge&labelColor=0a0a0a&logo=roblox&logoColor=white" alt="Roblox live" /></a>
+  <a href="https://github.com/74wille?tab=repositories"><img src="https://img.shields.io/badge/SHIPPED-03-ff2a4a?style=for-the-badge&labelColor=0a0a0a" alt="apps shipped" /></a>
 </p>
 
 <img src="assets/title-work.svg" width="100%" alt="Shipped" />
@@ -16,13 +15,12 @@
 </p>
 <p align="center">
   <a href="https://github.com/74wille/PromptForge-releases"><img src="assets/card-promptforge.svg" width="49%" alt="PromptForge" /></a>
-  <a href="https://www.roblox.com/games/87697408059425"><img src="assets/card-gasegg.svg" width="49%" alt="Steal a Gas Egg" /></a>
 </p>
 
 <img src="assets/title-stack.svg" width="100%" alt="Stack" />
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,electron,supabase,firebase,python,lua,html,css,git,github,vscode&theme=dark&perline=15" alt="stack" />
+  <img src="https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,electron,supabase,firebase,python,html,css,git,github,vscode&theme=dark&perline=15" alt="stack" />
 </p>
 
 <img src="assets/title-activity.svg" width="100%" alt="Activity" />

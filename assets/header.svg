@@ -12,7 +12,7 @@
 .sweep{animation:sw 4.5s linear infinite}@keyframes sw{from{transform:translateY(-60px)}to{transform:translateY(420px)}}
 
 @keyframes nz{0%{opacity:0}5%{opacity:.7}8%{opacity:0}}
-.type{clip-path:inset(0 100% 0 0);animation:ty 2.6s steps(38) .5s forwards}@keyframes ty{to{clip-path:inset(0 0 0 0)}}
+.type{clip-path:inset(0 100% 0 0);animation:ty 2.6s steps(42) .5s forwards}@keyframes ty{to{clip-path:inset(0 0 0 0)}}
 </style>
 <defs><pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#fff" fill-opacity=".035"/></pattern>
 <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".04"/></pattern>
@@ -33,11 +33,11 @@
 <text x="62" y="250" font-size="176" font-weight="900" letter-spacing="-4" fill="#f2f2f2" class="r">WILLE</text>
 <text x="62" y="250" font-size="176" font-weight="900" letter-spacing="-4" fill="#f2f2f2" class="r s1">WILLE</text>
 <text x="62" y="250" font-size="176" font-weight="900" letter-spacing="-4" fill="#ff2a4a" class="r s2">WILLE</text></g>
-<text x="72" y="306" font-size="22" font-weight="500" fill="#f2f2f2" class="m type">> building apps, tools &amp; roblox games_</text>
-<text x="72" y="344" font-size="14" font-weight="700" letter-spacing="3" fill="#6b7280" class="m">ELECTRON / NEXT.JS / SUPABASE / LUAU</text>
+<text x="72" y="306" font-size="22" font-weight="500" fill="#f2f2f2" class="m type">> building desktop apps, web apps &amp; tools_</text>
+<text x="72" y="344" font-size="14" font-weight="700" letter-spacing="3" fill="#6b7280" class="m">ELECTRON / NEXT.JS / SUPABASE / NODE</text>
 <g class="m" font-size="13" font-weight="700" fill="#6b7280" letter-spacing="2" text-anchor="end">
 <text x="1210" y="290">SYS.STATUS <tspan fill="#ff2a4a" class="blink">■ ONLINE</tspan></text>
-<text x="1210" y="314">BUILDS.SHIPPED <tspan fill="#f2f2f2">04</tspan></text>
+<text x="1210" y="314">BUILDS.SHIPPED <tspan fill="#f2f2f2">03</tspan></text>
 <text x="1210" y="338">SLEEP <tspan fill="#f2f2f2">OPTIONAL</tspan></text></g>
 <rect width="1280" height="380" fill="url(#scan)"/>
 <path d="M14 40V14H40" fill="none" stroke="#ff2a4a" stroke-width="3"/><path d="M1240 14H1266V40" fill="none" stroke="#ff2a4a" stroke-width="3"/><path d="M14 340V366H40" fill="none" stroke="#ff2a4a" stroke-width="3"/><path d="M1240 366H1266V340" fill="none" stroke="#ff2a4a" stroke-width="3"/>

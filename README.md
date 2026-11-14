@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/header.svg" width="100%" alt="Wille — I build desktop apps, web apps and tools" />
+  <img src="assets/header.svg?v=2" width="100%" alt="Wille — I build desktop apps, web apps and tools" />
 </p>
 
 <p align="center">
@@ -7,23 +7,23 @@
   <a href="https://github.com/74wille?tab=repositories"><img src="https://img.shields.io/badge/SHIPPED-03-ff2a4a?style=for-the-badge&labelColor=0a0a0a" alt="apps shipped" /></a>
 </p>
 
-<img src="assets/title-work.svg" width="100%" alt="Shipped" />
+<img src="assets/title-work.svg?v=2" width="100%" alt="Shipped" />
 
 <p align="center">
-  <a href="https://github.com/74wille/WillesJournal-releases"><img src="assets/card-journal.svg" width="49%" alt="Wille's Journal" /></a>
-  <a href="https://github.com/74wille/WillesDesktop-releases"><img src="assets/card-desktop.svg" width="49%" alt="Wille's Desktop" /></a>
+  <a href="https://github.com/74wille/WillesJournal-releases"><img src="assets/card-journal.svg?v=2" width="49%" alt="Wille's Journal" /></a>
+  <a href="https://github.com/74wille/WillesDesktop-releases"><img src="assets/card-desktop.svg?v=2" width="49%" alt="Wille's Desktop" /></a>
 </p>
 <p align="center">
-  <a href="https://github.com/74wille/PromptForge-releases"><img src="assets/card-promptforge.svg" width="49%" alt="PromptForge" /></a>
+  <a href="https://github.com/74wille/PromptForge-releases"><img src="assets/card-promptforge.svg?v=2" width="49%" alt="PromptForge" /></a>
 </p>
 
-<img src="assets/title-stack.svg" width="100%" alt="Stack" />
+<img src="assets/title-stack.svg?v=2" width="100%" alt="Stack" />
 
 <p align="center">
   <img src="https://skillicons.dev/icons?i=js,ts,react,nextjs,nodejs,electron,supabase,firebase,python,html,css,git,github,vscode&theme=dark&perline=15" alt="stack" />
 </p>
 
-<img src="assets/title-activity.svg" width="100%" alt="Activity" />
+<img src="assets/title-activity.svg?v=2" width="100%" alt="Activity" />
 
 <p align="center">
   <picture>
@@ -33,5 +33,5 @@
 </p>
 
 <p align="center">
-  <img src="assets/footer.svg" width="100%" alt="Thanks for stopping by" />
+  <img src="assets/footer.svg?v=2" width="100%" alt="Thanks for stopping by" />
 </p>

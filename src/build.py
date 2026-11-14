@@ -20,8 +20,10 @@ def header():
     random.seed(7)
     W, H = 1280, 360
     pixels = []
-    for _ in range(46):
+    while len(pixels) < 46:
         x, y, s = random.randrange(20, W - 20), random.randrange(20, H - 20), random.choice((4, 6, 8))
+        if x < 900 and 60 < y < 340: continue  # håll texten ren
+        if x > 900 and 50 < y < 360 and (x < 1220): continue  # och ikonerna
         d, dur = random.random() * 4, 2.5 + random.random() * 3
         pixels.append(f'<rect x="{x}" y="{y}" width="{s}" height="{s}" fill="{random.choice((ACC, ACC2, "#ffffff"))}" '
                       f'class="px" style="animation-delay:{d:.2f}s;animation-duration:{dur:.2f}s"/>')
@@ -40,7 +42,7 @@ text{{font-family:R,Roboto,Helvetica,Arial,sans-serif}}
 .bob{{animation:bob 6s ease-in-out infinite}}@keyframes bob{{50%{{transform:translateY(-10px)}}}}
 .glow{{animation:drift 14s ease-in-out infinite alternate}}@keyframes drift{{to{{transform:translate(420px,60px)}}}}
 .type{{clip-path:inset(0 100% 0 0);animation:type 3.2s steps({len(sub)}) .6s forwards}}@keyframes type{{to{{clip-path:inset(0 0 0 0)}}}}
-.cur{{animation:blink 1s step-end infinite}}@keyframes blink{{50%{{opacity:0}}}}
+@keyframes blink{{50%{{opacity:0}}}}
 .cur{{transform:translateX(0);animation:blink 1s step-end infinite,mv 3.2s steps({len(sub)}) .6s forwards}}@keyframes mv{{to{{transform:translateX(var(--w))}}}}
 .in{{opacity:0;animation:in .9s ease-out forwards}}@keyframes in{{from{{opacity:0;transform:translateY(14px)}}to{{opacity:1;transform:none}}}}
 </style>

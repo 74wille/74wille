@@ -1,5 +1,6 @@
 # Bygger profilens SVG-grafik till ../assets. Kör: python src/build.py
-import base64, pathlib, random
+# Stil: zine/risograf – kopieringsbrus, rivna papperslappar, tejp, röd tusch och stämpel.
+import base64, math, pathlib, random
 
 SRC = pathlib.Path(__file__).parent
 OUT = SRC.parent / "assets"
@@ -7,142 +8,122 @@ OUT.mkdir(exist_ok=True)
 
 def b64(name): return base64.b64encode((SRC / name).read_bytes()).decode()
 
-FONTS = "".join(
-    f"@font-face{{font-family:{f};font-weight:{w};src:url(data:font/woff2;base64,{b64(file)})}}"
-    for f, w, file in (("R", 700, "roboto-700.woff2"), ("R", 900, "roboto-900.woff2"),
-                       ("M", 500, "mono-500.woff2"), ("M", 700, "mono-700.woff2")))
+FONTS = "".join(f"@font-face{{font-family:R;font-weight:{w};src:url(data:font/woff2;base64,{b64(f)})}}"
+                for w, f in ((700, "roboto-700.woff2"), (900, "roboto-900.woff2")))
+RED, PAPER, INK, BG = "#ff2a4a", "#f1ece0", "#111111", "#141414"
+STYLE = f"""{FONTS}text{{font-family:R,Roboto,Arial,sans-serif}}
+.draw{{stroke-dasharray:var(--l);stroke-dashoffset:var(--l);animation:dr .9s cubic-bezier(.6,0,.3,1) var(--d,.3s) forwards}}
+@keyframes dr{{to{{stroke-dashoffset:0}}}}
+.slam{{opacity:0;transform-box:fill-box;transform-origin:center;animation:sl .35s cubic-bezier(.2,1.6,.4,1) var(--d,1.2s) forwards}}
+@keyframes sl{{from{{opacity:0;transform:scale(1.8) rotate(-8deg)}}to{{opacity:1;transform:scale(1)}}}}
+.drop{{opacity:0;animation:dp .5s cubic-bezier(.2,1.4,.4,1) var(--d,0s) forwards}}
+@keyframes dp{{from{{opacity:0;transform:translateY(-24px)}}to{{opacity:1;transform:none}}}}"""
+# rough = ojämna tryckkanter, grain = kopieringsbrus
+DEFS = """<filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" seed="7" stitchTiles="stitch"/>
+<feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0"/></filter>"""
 
-BG, LINE, RED, TXT, MUTED = "#060708", "#1c1f24", "#ff2a4a", "#f2f2f2", "#6b7280"
-BASE = f"{FONTS}.r{{font-family:R,Roboto,Arial,sans-serif}}.m{{font-family:M,'Roboto Mono',Consolas,monospace}}"
-SCAN = ('<pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">'
-        '<rect width="4" height="1" fill="#fff" fill-opacity=".035"/></pattern>')
+def esc(s): return s.replace("&", "&amp;").replace("<", "&lt;").replace("'", "&#8217;")
 
-def esc(s): return s.replace("&", "&amp;").replace("<", "&lt;")
+def svg(W, H, body):
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">'
+            f'<style>{STYLE}</style><defs>{DEFS}</defs>{body}</svg>')
 
-def glitch_text(x, y, size, text, cls="r", weight=900, ls=-4):
-    """Text med RGB-split och ryckiga glitch-skivor."""
-    t = f'x="{x}" y="{y}" font-size="{size}" font-weight="{weight}" letter-spacing="{ls}"'
-    return f'''<g class="gl">
-<text {t} fill="#00e5ff" class="{cls} ca" opacity=".75">{text}</text>
-<text {t} fill="{RED}" class="{cls} cb" opacity=".85">{text}</text>
-<text {t} fill="{TXT}" class="{cls}">{text}</text>
-<text {t} fill="{TXT}" class="{cls} s1">{text}</text>
-<text {t} fill="{RED}" class="{cls} s2">{text}</text></g>'''
+def T(x, y, s, txt, fill=INK, w=900, ls=0, extra=""):
+    return f'<text x="{x}" y="{y}" font-size="{s}" font-weight="{w}" letter-spacing="{ls}" fill="{fill}" {extra}>{txt}</text>'
 
-GLITCH_CSS = """
-.ca{animation:ca 3s steps(1) infinite}.cb{animation:cb 3s steps(1) infinite}
-@keyframes ca{0%,100%{transform:translate(-3px,0)}20%{transform:translate(-6px,1px)}22%{transform:translate(2px,-1px)}24%{transform:translate(-3px,0)}70%{transform:translate(-9px,0)}71%{transform:translate(-3px,0)}}
-@keyframes cb{0%,100%{transform:translate(3px,0)}20%{transform:translate(6px,-1px)}22%{transform:translate(-2px,1px)}24%{transform:translate(3px,0)}70%{transform:translate(9px,0)}71%{transform:translate(3px,0)}}
-.s1,.s2{opacity:0}
-.s1{animation:s1 3s steps(1) infinite}.s2{animation:s2 3s steps(1) infinite}
-@keyframes s1{20%{opacity:1;clip-path:inset(30% 0 52% 0);transform:translateX(-14px)}22%{opacity:1;clip-path:inset(62% 0 20% 0);transform:translateX(10px)}24%{opacity:0}70%{opacity:1;clip-path:inset(10% 0 75% 0);transform:translateX(18px)}72%{opacity:0}}
-@keyframes s2{21%{opacity:.9;clip-path:inset(45% 0 40% 0);transform:translateX(12px)}23%{opacity:0}71%{opacity:.9;clip-path:inset(70% 0 12% 0);transform:translateX(-16px)}72%{opacity:0}}
-.flick{animation:fl 4s steps(1) infinite}@keyframes fl{0%,100%{opacity:1}43%{opacity:.2}44%{opacity:1}46%{opacity:.4}47%{opacity:1}}
-.blink{animation:bl 1s steps(1) infinite}@keyframes bl{50%{opacity:0}}
-.sweep{animation:sw 4.5s linear infinite}@keyframes sw{from{transform:translateY(-60px)}to{transform:translateY(420px)}}
-"""
+def torn(x, y, w, h, seed, fill=PAPER, edges="tb"):
+    """Papperslapp med rivna kanter (t=topp, b=botten)."""
+    r = random.Random(seed)
+    def edge(y0, a, b):
+        pts, xx = [], a
+        while (xx < b) if a < b else (xx > b):
+            pts.append(f"{xx:.0f} {y0 + r.uniform(-4, 4):.1f}"); xx += r.uniform(8, 22) * (1 if a < b else -1)
+        return pts + [f"{b:.0f} {y0:.0f}"]
+    top = edge(y, x, x + w) if "t" in edges else [f"{x} {y}", f"{x+w} {y}"]
+    bot = edge(y + h, x + w, x) if "b" in edges else [f"{x+w} {y+h}", f"{x} {y+h}"]
+    return f'<path d="M{" L".join(top + bot)}Z" fill="{fill}"/>'
 
-def brackets(W, H, m=14, l=26, c=RED):
-    p = lambda d: f'<path d="{d}" fill="none" stroke="{c}" stroke-width="3"/>'
-    return (p(f"M{m} {m+l}V{m}H{m+l}") + p(f"M{W-m-l} {m}H{W-m}V{m+l}") +
-            p(f"M{m} {H-m-l}V{H-m}H{m+l}") + p(f"M{W-m-l} {H-m}H{W-m}V{H-m-l}"))
+def tape(cx, cy, w, rot, txt=""):
+    t = T(cx, cy + 8, 20, txt, INK, 900, 2, 'text-anchor="middle"') if txt else ""
+    return (f'<g transform="rotate({rot} {cx} {cy})"><rect x="{cx-w/2}" y="{cy-17}" width="{w}" height="34" '
+            f'fill="#e9e1c8" fill-opacity=".82"/>{t}</g>')
+
+def marker(x1, y, x2, seed, w=12, d=".3s", amp=4):
+    r = random.Random(seed); pts, x = [(x1, y)], x1
+    while x < x2:
+        x = min(x + r.randint(40, 90), x2); pts.append((x, y + r.uniform(-amp, amp)))
+    L = sum(math.dist(a, b) for a, b in zip(pts, pts[1:])) + 10
+    d_ = "M" + " L".join(f"{a:.0f} {b:.1f}" for a, b in pts)
+    return (f'<path class="draw" style="--l:{L:.0f};--d:{d}" d="{d_}" stroke="{RED}" stroke-width="{w}" '
+            f'fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>')
+
+def halftone(x0, y0, W, H, cx, cy, step=14, maxr=6.5):
+    dots = []
+    for x in range(x0, x0 + W, step):
+        for y in range(y0, y0 + H, step):
+            k = 1 - math.dist((x, y), (cx, cy)) / 420
+            if k > .05: dots.append(f'<circle cx="{x}" cy="{y}" r="{maxr*k:.1f}"/>')
+    return f'<g fill="{RED}" opacity=".85">{"".join(dots)}</g>'
 
 # ---------- banner ----------
 def header():
-    random.seed(11)
-    W, H = 1280, 380
-    noise = "".join(f'<rect x="{random.randrange(W)}" y="{random.randrange(H)}" width="{random.choice((2,3,40,90,160))}" height="2" fill="{random.choice((RED, "#fff"))}" '
-                    f'opacity="0" style="animation:nz {2+random.random()*3:.2f}s steps(1) {random.random()*3:.2f}s infinite"/>'
-                    for _ in range(26))
-    sub = "> building desktop apps, web apps & tools_"
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">
-<style>{BASE}{GLITCH_CSS}
-@keyframes nz{{0%{{opacity:0}}5%{{opacity:.7}}8%{{opacity:0}}}}
-.type{{clip-path:inset(0 100% 0 0);animation:ty 2.6s steps({len(sub)}) .5s forwards}}@keyframes ty{{to{{clip-path:inset(0 0 0 0)}}}}
-</style>
-<defs>{SCAN}
-<pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".04"/></pattern>
-<linearGradient id="sw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{RED}" stop-opacity="0"/><stop offset="1" stop-color="{RED}" stop-opacity=".12"/></linearGradient>
-<clipPath id="cut"><path d="M0 0H{W-60}L{W} 60V{H}H60L0 {H-60}Z"/></clipPath>
-</defs>
-<g clip-path="url(#cut)">
-<rect width="{W}" height="{H}" fill="{BG}"/>
-<rect width="{W}" height="{H}" fill="url(#grid)"/>
-<path d="M{W-520} 0H{W}V{H}H{W-820}Z" fill="{RED}" fill-opacity=".06"/>
-<path d="M{W-470} 0H{W-455}L{W-755} {H}H{W-770}Z" fill="{RED}" fill-opacity=".5"/>
-<rect class="sweep" x="0" y="0" width="{W}" height="60" fill="url(#sw)"/>
-{noise}
-<text x="72" y="92" font-size="16" font-weight="700" letter-spacing="4" fill="{RED}" class="m flick">// STOCKHOLM, SE · EST. 2026</text>
-{glitch_text(62, 250, 176, "WILLE")}
-<text x="72" y="306" font-size="22" font-weight="500" fill="{TXT}" class="m type">{esc(sub)}</text>
-<text x="72" y="344" font-size="14" font-weight="700" letter-spacing="3" fill="{MUTED}" class="m">ELECTRON / NEXT.JS / SUPABASE / NODE</text>
-<g class="m" font-size="13" font-weight="700" fill="{MUTED}" letter-spacing="2" text-anchor="end">
-<text x="{W-70}" y="290">SYS.STATUS <tspan fill="{RED}" class="blink">■ ONLINE</tspan></text>
-<text x="{W-70}" y="314">BUILDS.SHIPPED <tspan fill="{TXT}">03</tspan></text>
-<text x="{W-70}" y="338">SLEEP <tspan fill="{TXT}">OPTIONAL</tspan></text></g>
-<rect width="{W}" height="{H}" fill="url(#scan)"/>
-{brackets(W, H)}
-</g></svg>'''
+    W, H = 1280, 400
+    return svg(W, H, f'''<rect width="{W}" height="{H}" fill="{BG}"/>
+{halftone(820, 0, 460, 400, 1280, 0)}
+<g filter="url(#rough)">
+{T(54, 242, 236, "wille", RED, 900, -10, 'opacity=".9"')}
+{T(46, 236, 236, "wille", PAPER, 900, -10)}
+</g>
+{marker(52, 272, 640, 3, 16)}
+<g class="drop" style="--d:.9s" transform="rotate(-2 400 330)">{torn(40, 300, 640, 66, 5)}
+{T(66, 346, 30, "makes apps. ships them. repeats.", INK, 900, -.5)}</g>
+<g class="drop" style="--d:.6s">{tape(1040, 74, 290, 6, "STOCKHOLM, SWEDEN")}</g>
+<g class="slam" style="--d:1.4s"><g transform="rotate(-9 1040 270)" filter="url(#rough)">
+<rect x="905" y="215" width="270" height="110" rx="6" fill="none" stroke="{PAPER}" stroke-width="7"/>
+<rect x="917" y="227" width="246" height="86" rx="3" fill="none" stroke="{PAPER}" stroke-width="2"/>
+{T(1040, 270, 44, "3 APPS", PAPER, 900, 4, 'text-anchor="middle"')}
+{T(1040, 302, 20, "SHIPPED &amp; LIVE", PAPER, 900, 5, 'text-anchor="middle"')}</g></g>
+<rect width="{W}" height="{H}" filter="url(#grain)"/>''')
 
-# ---------- projektkort ----------
-def card(num, name, lines, chips, cta, tag):
-    W, H = 600, 260
-    chip_svg, x = "", 40
-    for c in chips:
-        w = len(c) * 9 + 24
-        chip_svg += (f'<rect x="{x}" y="188" width="{w:.0f}" height="28" fill="none" stroke="{MUTED}"/>'
-                     f'<text x="{x+w/2:.0f}" y="207" font-size="12" font-weight="700" fill="{TXT}" text-anchor="middle" letter-spacing="1" class="m">{c}</text>')
-        x += w + 8
-    body = "".join(f'<text x="40" y="{140+i*22}" font-size="15" font-weight="500" fill="{MUTED}" class="m">{esc(l)}</text>' for i, l in enumerate(lines))
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">
-<style>{BASE}{GLITCH_CSS}</style>
-<defs>{SCAN}<clipPath id="cut"><path d="M0 0H{W-34}L{W} 34V{H}H34L0 {H-34}Z"/></clipPath></defs>
-<g clip-path="url(#cut)">
-<rect width="{W}" height="{H}" fill="{BG}"/>
-<text x="{W-24}" y="{H-20}" font-size="190" font-weight="900" fill="#fff" fill-opacity=".04" text-anchor="end" class="r" letter-spacing="-8">{num}</text>
-<text x="40" y="52" font-size="13" font-weight="700" letter-spacing="3" fill="{RED}" class="m">{num} // {tag}</text>
-{glitch_text(36, 104, 44, esc(name), ls=-1)}
-{body}{chip_svg}
-<text x="{W-40}" y="{H-36}" font-size="15" font-weight="700" fill="{RED}" text-anchor="end" letter-spacing="2" class="m">[ {cta} ]<tspan class="blink">_</tspan></text>
-<rect width="{W}" height="{H}" fill="url(#scan)"/>
-<path d="M.5 .5H{W-34}L{W-.5} 34V{H-.5}H34L.5 {H-34}Z" fill="none" stroke="{LINE}" stroke-width="2"/>
-<path d="M0 0H140" stroke="{RED}" stroke-width="6"/>
-</g></svg>'''
+# ---------- projektlappar (tre i bredd) ----------
+def card(i, name, desc, plat):
+    W, H = 420, 250
+    rot = (-2.2, 1.6, -1.2)[i]
+    return svg(W, H, f'''<g class="drop" style="--d:{.15*i:.2f}s"><g transform="rotate({rot} 210 130)">
+<rect x="22" y="34" width="376" height="190" fill="#000" opacity=".35" transform="translate(6 7)"/>
+{torn(22, 34, 376, 190, 20 + i, PAPER, "b")}
+{T(46, 102, 36, esc(name), INK, 900, -1)}
+{marker(46, 118, 46 + len(name) * 17, 9 + i, 6, f"{.5 + .15*i:.2f}s", 2)}
+{T(46, 156, 19, esc(desc), "#555", 700)}
+{T(46, 200, 15, plat, RED, 900, 3)}
+{T(374, 200, 18, "get it ↓", INK, 900, 0, 'text-anchor="end"')}
+<rect x="22" y="34" width="376" height="190" filter="url(#grain)"/>
+</g>{tape(210, 34, 120, (-4, 3, -2)[i])}</g>''')
 
 # ---------- rubriker ----------
-def title(idx, text, sub):
-    W = 1280
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 80" width="{W}" height="80">
-<style>{BASE}{GLITCH_CSS}
-.bar{{transform-origin:0 0;transform:scaleX(0);animation:g 1s .2s steps(12) forwards}}@keyframes g{{to{{transform:scaleX(1)}}}}</style>
-<text x="0" y="50" font-size="16" font-weight="700" fill="{RED}" class="m">{idx}</text>
-{glitch_text(44, 54, 40, text, ls=1)}
-<text x="{44+len(text)*28+24}" y="50" font-size="15" font-weight="500" fill="{MUTED}" class="m">// {esc(sub)}</text>
-<rect class="bar" x="0" y="72" width="{W}" height="2" fill="{RED}"/><rect x="0" y="72" width="{W}" height="2" fill="{LINE}" opacity=".6"/></svg>'''
+def title(text, note, seed):
+    W, H = 1280, 96
+    w = len(text) * 27 + 60
+    return svg(W, H, f'''<g transform="rotate(-1.5 {w/2} 50)">{torn(0, 20, w, 58, seed)}
+{T(28, 64, 38, text, INK, 900, 1)}</g>
+{T(w + 34, 60, 22, note, "#8b949e", 700)}
+{marker(w + 30, 72, w + 34 + len(note) * 11, seed, 4, ".4s", 2)}''')
 
 def footer():
     W = 1280
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 90" width="{W}" height="90">
-<style>{BASE}{GLITCH_CSS}</style>
-<rect x="0" y="10" width="{W}" height="2" fill="{LINE}"/><rect x="0" y="10" width="160" height="2" fill="{RED}"/>
-<text x="{W/2}" y="60" font-size="15" font-weight="700" letter-spacing="6" fill="{MUTED}" text-anchor="middle" class="m flick">END OF TRANSMISSION <tspan fill="{RED}" class="blink">■</tspan></text></svg>'''
+    return svg(W, 100, f'''{marker(440, 30, 840, 2, 6, ".2s", 6)}
+{T(W/2, 80, 22, "thanks for scrolling. now go ship something.", "#8b949e", 700, 0, 'text-anchor="middle"')}''')
 
-files = {
-    "header.svg": header(),
-    "card-journal.svg": card("01", "Wille's Journal",
-        ["The complete trading journal. Log every", "trade, track your stats, get better."],
-        ["WINDOWS", "MAC"], "DOWNLOAD", "DESKTOP APP"),
-    "card-desktop.svg": card("02", "Wille's Desktop",
-        ["Premium desktop widgets and taskbar", "customization for Windows."],
-        ["WINDOWS"], "DOWNLOAD", "DESKTOP APP"),
-    "card-promptforge.svg": card("03", "PromptForge",
-        ["A Windows terminal you shape with", "checkboxes. Your PATH, your rules."],
-        ["WINDOWS", "TERMINAL"], "DOWNLOAD", "DEV TOOL"),
-    "title-work.svg": title("01", "SHIPPED", "live, download it"),
-    "title-stack.svg": title("02", "ARSENAL", "what i build with"),
-    "title-activity.svg": title("03", "ACTIVITY", "commits, eaten alive"),
-    "footer.svg": footer(),
-}
+APPS = (("Wille's Journal", "Log every trade. See what works.", "WINDOWS · MAC"),
+        ("Wille's Desktop", "Widgets and taskbar tweaks.", "WINDOWS"),
+        ("PromptForge", "A terminal set up with checkboxes.", "WINDOWS"))
+files = {"header.svg": header(), "footer.svg": footer(),
+         "title-work.svg": title("SHIPPED", "live, go download", 31),
+         "title-stack.svg": title("TOOLS", "what i build with", 32),
+         "title-activity.svg": title("ACTIVITY", "commits, eaten alive", 33)}
+for i, (key, app) in enumerate(zip(("journal", "desktop", "promptforge"), APPS)):
+    files[f"card-{key}.svg"] = card(i, *app)
 for n, s in files.items():
     (OUT / n).write_text(s, encoding="utf-8")
     print(n, len(s) // 1024, "KB")

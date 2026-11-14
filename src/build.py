@@ -111,7 +111,7 @@ def footer():
 APPS = (("Wille's Journal", "Log every trade. See what works.", "WINDOWS · MAC"),
         ("Wille's Desktop", "Widgets and taskbar tweaks.", "WINDOWS"),
         ("PromptForge", "A terminal set up with checkboxes.", "WINDOWS"))
-files = {"header.svg": header(), "footer.svg": footer(),
+files = {"banner.svg": header(), "footer.svg": footer(),
          "title-work.svg": title("SHIPPED", "live, go download", 31),
          "title-stack.svg": title("TOOLS", "what i build with", 32),
          "title-activity.svg": title("ACTIVITY", "commits, eaten alive", 33)}

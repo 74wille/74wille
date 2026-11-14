@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/header.svg?v=4" width="100%" alt="Wille — I build desktop apps, web apps and tools" />
+  <img src="assets/banner.svg" width="100%" alt="Wille — I build desktop apps, web apps and tools" />
 </p>
 
 <p align="center">
